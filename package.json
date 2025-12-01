@@ -1,0 +1,10 @@
+{
+  "name": "ebay-image-search",
+  "version": "1.0.0",
+  "type": "module",
+  "dependencies": {
+    "express": "^4.18.2",
+    "express-fileupload": "^1.4.0",
+    "puppeteer": "^21.0.0"
+  }
+}
