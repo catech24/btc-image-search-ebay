@@ -64,6 +64,17 @@ app.post("/image-search", async (req, res) => {
       timeout: 60000
     });
 
+    // DEBUG: dump all buttons with aria-labels
+const debugButtons = await page.$$eval("button", btns =>
+  btns.map(b => ({
+    aria: b.getAttribute("aria-label"),
+    class: b.className,
+    html: b.outerHTML
+  }))
+);
+
+console.log("DEBUG BUTTONS:", JSON.stringify(debugButtons, null, 2));
+
     // Wait for camera button
     await page.waitForSelector("#gh-btn-photo", { timeout: 60000 });
 
