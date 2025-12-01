@@ -51,13 +51,16 @@ app.post("/image-search", async (req, res) => {
     await page.setUserAgent(MOBILE_UA);
     await page.setViewport({ width: 390, height: 844, isMobile: true });
 
-    // For now, just prove Chromium + Puppeteer works by loading eBay and getting the title
-    await page.goto("https://www.ebay.com", {
+await page.goto("https://www.ebay.com", {
   waitUntil: "domcontentloaded",
   timeout: 60000
 });
 
-    const title = await page.title();
+// Wait for page content to load
+await page.waitForSelector("title", { timeout: 60000 });
+
+const title = await page.title();
+
 
     await browser.close();
 
