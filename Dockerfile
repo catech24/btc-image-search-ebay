@@ -10,6 +10,9 @@ WORKDIR /app
 # Install Tailscale
 RUN apt-get update && apt-get install -y curl && curl -fsSL https://tailscale.com/install.sh | sh
 
+RUN mkdir -p /var/run/tailscale /var/cache/tailscale
+
+
 # Install dependencies
 COPY package*.json ./
 RUN npm install
@@ -23,4 +26,4 @@ ENV PORT=8080
 
 EXPOSE 8080
 
-CMD ["node", "server.js"]
+CMD tailscaled & node server.js
