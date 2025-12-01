@@ -7,6 +7,9 @@ RUN apt-get update \
 
 WORKDIR /app
 
+# Install Tailscale
+RUN apt-get update && apt-get install -y tailscale
+
 # Install dependencies
 COPY package*.json ./
 RUN npm install
