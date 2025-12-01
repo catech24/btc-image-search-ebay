@@ -18,15 +18,17 @@ app.post("/image-search", async (req, res) => {
     const imageBuffer = req.files.image.data;
 
     const browser = await puppeteer.launch({
-      headless: true,
-      args: [
-        "--no-sandbox",
-        "--disable-setuid-sandbox",
-        "--disable-dev-shm-usage",
-        "--single-process",
-        "--disable-gpu"
-      ]
-    });
+  headless: "new",
+  executablePath: "/usr/bin/chromium",
+  args: [
+    "--no-sandbox",
+    "--disable-setuid-sandbox",
+    "--disable-gpu",
+    "--disable-dev-shm-usage",
+    "--single-process"
+  ]
+});
+
 
     const page = await browser.newPage();
     await page.setUserAgent(MOBILE_UA);
