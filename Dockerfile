@@ -8,7 +8,7 @@ RUN apt-get update \
 WORKDIR /app
 
 # Install Tailscale
-RUN apt-get update && apt-get install -y tailscale
+RUN apt-get update && apt-get install -y curl && curl -fsSL https://tailscale.com/install.sh | sh
 
 # Install dependencies
 COPY package*.json ./
