@@ -1,3 +1,13 @@
+import { execSync } from "child_process";
+
+try {
+  execSync(`tailscale up --auth-key=${process.env.TS_AUTH_KEY} --exit-node=${process.env.TS_EXIT_NODE} --accept-routes`, { stdio: "inherit" });
+  console.log("Tailscale connected");
+} catch (e) {
+  console.error("Tailscale failed:", e);
+}
+
+
 import express from "express";
 import fileUpload from "express-fileupload";
 import puppeteer from "puppeteer-core";
