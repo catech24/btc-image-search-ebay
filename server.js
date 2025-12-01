@@ -1,6 +1,7 @@
 import express from "express";
 import fileUpload from "express-fileupload";
-import puppeteer from "puppeteer";
+import puppeteer from "puppeteer-core";
+
 
 const app = express();
 app.use(fileUpload({ limits: { fileSize: 15 * 1024 * 1024 } }));
