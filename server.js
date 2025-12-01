@@ -45,13 +45,17 @@ app.post("/image-search", async (req, res) => {
     const inputSelector = 'input[type="file"]';
     await page.waitForSelector(inputSelector);
 
-    // Upload file buffer
-    const inputUploadHandle = await page.$(inputSelector);
-    await inputUploadHandle.uploadFile("/tmp/upload.jpg");
+    // ⭐ CORRECT ORDER — WORKS
+import fs from "fs";
 
-    // Save file to /tmp
-    const fs = await import("fs");
-    fs.writeFileSync("/tmp/upload.jpg", imageBuffer);
+// 1. Write the uploaded image to /tmp BEFORE telling Puppeteer to upload it
+fs.writeFileSync("/tmp/upload.jpg", imageBuffer);
+
+// 2. Wait for eBay file input
+const inputUploadHandle = await page.$('input[type="file"]');
+
+// 3. Upload the file we just wrote
+await inputUploadHandle.uploadFile("/tmp/upload.jpg");
 
     // Wait for results to load
     await page.waitForSelector(".s-item", { timeout: 20000 });
