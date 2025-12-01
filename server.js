@@ -58,36 +58,21 @@ app.post("/image-search", async (req, res) => {
     );
     await page.setViewport({ width: 390, height: 844, isMobile: true });
 
-    // Open mobile eBay search page
-    await page.goto("https://m.ebay.com/sch/i.html", {
-      waitUntil: "domcontentloaded",
-      timeout: 60000
-    });
+ // Load fallback image-search page that ALWAYS shows upload input
+await page.goto("https://www.ebay.com/sch/i.html?_nkw=&_saslop=1&_sofindtype=7", {
+  waitUntil: "domcontentloaded",
+  timeout: 60000
+});
 
-    // DEBUG: dump all buttons with aria-labels
-const debugButtons = await page.$$eval("button", btns =>
-  btns.map(b => ({
-    aria: b.getAttribute("aria-label"),
-    class: b.className,
-    html: b.outerHTML
-  }))
-);
+// Upload input is available immediately — no camera button needed
+await page.waitForSelector('input[type="file"]', { timeout: 60000 });
 
-console.log("DEBUG BUTTONS:", JSON.stringify(debugButtons, null, 2));
+const inputUploadHandle = await page.$('input[type="file"]');
+await inputUploadHandle.uploadFile(tmpPath);
 
-    // Wait for camera button
-    await page.waitForSelector("#gh-btn-photo", { timeout: 60000 });
+// Wait for results to load
+await page.waitForSelector(".srp-results", { timeout: 60000 });
 
-    // Click camera icon
-    await page.click("#gh-btn-photo");
-
-    // Wait for input[type=file]
-    await page.waitForSelector('input[type="file"]', { timeout: 60000 });
-
-    const inputUploadHandle = await page.$('input[type="file"]');
-
-    // Upload saved /tmp file
-    await inputUploadHandle.uploadFile(tmpPath);
 
     // Wait for results
     await page.waitForSelector(".srp-results", { timeout: 60000 });
